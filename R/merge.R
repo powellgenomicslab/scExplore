@@ -1,6 +1,6 @@
-#' @title Plot gene expression of genes and their overlap
+#' @title Plot expression of genes and their overlap
 #' @description This function allows to plot the expression of genes in individual color scales
-#' and their corresponding "merge" value
+#' and their corresponding "merge" visualization
 #' @param object A Seurat object
 #' @param gene1 Gene 1
 #' @param gene2 Gene 2
