@@ -7,3 +7,5 @@ R package for single-cell data visualization
 ```r
 devtools::install_github("powellgenomicslab/scExplore")
 ```
+
+![Example](misc/example.png)
