@@ -12,6 +12,8 @@
 #' the corresponding value of that quantile
 #' @param alpha Alpha level to adjust transparency of colors
 #' @param size Size of points
+#' @param returnGrid If \code{TRUE}, a grid is generated using cowplot. Otherwise, a list with the plots is
+#' returned
 #' @return A grid plot with individual genes and merge gene expression values
 #' @importFrom cowplot plot_grid
 #' @export
@@ -24,7 +26,7 @@
 #'
 
 
-plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", qclip = 0.95, alpha = 0.3){
+plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", qclip = 0.95, alpha = 0.3, returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -107,7 +109,11 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
 
   pGenes$merge <- p
 
-  plot_grid(plotlist = pGenes, nrow = 1, rel_widths = c(1, 1, 4/5))
+  if(returnGrid){
+    plot_grid(plotlist = pGenes, nrow = 1, rel_widths = c(1, 1, 4/5))
+  }else{
+    pGenes
+  }
 
 
 }

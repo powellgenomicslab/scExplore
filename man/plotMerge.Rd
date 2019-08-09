@@ -5,7 +5,7 @@
 \title{Plot expression of genes and their overlap}
 \usage{
 plotMerge(object, gene1, gene2, type = "data", reduction = "umap",
-  qclip = 0.95, alpha = 0.3)
+  qclip = 0.95, alpha = 0.3, returnGrid = TRUE)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -24,6 +24,9 @@ cells for each gene expressing a value greater to the quantile value in the dist
 the corresponding value of that quantile}
 
 \item{alpha}{Alpha level to adjust transparency of colors}
+
+\item{returnGrid}{If \code{TRUE}, a grid is generated using cowplot. Otherwise, a list with the plots is
+returned}
 
 \item{size}{Size of points}
 }
