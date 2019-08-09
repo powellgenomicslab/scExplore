@@ -51,6 +51,15 @@ plotMerge <- function(object, gene1, gene2, dims = c(1,2), reduction = "umap", t
 
   # Extract embeddings
   cellEmbeddings <- as.data.frame(Embeddings(slot(object, "reductions")[[reduction]]))
+
+  # Validate dimensions
+  dimsInEmbeddings <- dims %in% seq_len(ncol(cellEmbeddings))
+
+  if(!all(dimsInEmbeddings)){
+    missingDim <- dims[which(!dimsInEmbeddings)]
+    stop(paste("Dimension", missingDim, "does not exist in", reduction, "\n  "))
+  }
+
   cellEmbeddings <- cellEmbeddings[,dims]
 
   # Extract gene expression values

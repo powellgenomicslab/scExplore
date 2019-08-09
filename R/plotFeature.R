@@ -59,6 +59,15 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
   cellEmbeddings <- as.data.frame(Embeddings(slot(object, "reductions")[[reduction]]))
   cellEmbeddings <- cellEmbeddings[,dims]
 
+  # Validate dimensions
+  dimsInEmbeddings <- dims %in% seq_len(ncol(cellEmbeddings))
+
+  if(!all(dimsInEmbeddings)){
+    missingDim <- dims[which(!dimsInEmbeddings)]
+    stop(paste("Dimension", missingDim, "does not exist in", reduction, "\n  "))
+  }
+
+
   if(is(var, "numeric") | is(var, "integer")){
 
     # Clip outliers
