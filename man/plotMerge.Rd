@@ -5,7 +5,7 @@
 \title{Plot expression of genes and their overlap}
 \usage{
 plotMerge(object, gene1, gene2, type = "data", reduction = "umap",
-  qclip = 0.95, alpha = 0.3, returnGrid = TRUE)
+  qclip = 0.99, alpha = 0.7, returnGrid = TRUE)
 }
 \arguments{
 \item{object}{A Seurat object}

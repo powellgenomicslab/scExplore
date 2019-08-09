@@ -9,7 +9,9 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
-    ggplot2,
-    cowplot
+    ggplot2
+Imports:
+    cowplot,
+    ggrepel
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
