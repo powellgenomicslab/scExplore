@@ -26,7 +26,7 @@
 #'
 
 
-plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", qclip = 0.95, alpha = 0.3, returnGrid = TRUE){
+plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", qclip = 0.99, alpha = 0.7, returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
