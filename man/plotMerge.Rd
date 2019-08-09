@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge.R
 \name{plotMerge}
 \alias{plotMerge}
-\title{Plot gene expression of genes and their overlap}
+\title{Plot expression of genes and their overlap}
 \usage{
 plotMerge(object, gene1, gene2, type = "data", reduction = "umap",
   qclip = 0.95, alpha = 0.3)
@@ -32,7 +32,7 @@ A grid plot with individual genes and merge gene expression values
 }
 \description{
 This function allows to plot the expression of genes in individual color scales
-and their corresponding "merge" value
+and their corresponding "merge" visualization
 }
 \examples{
 
