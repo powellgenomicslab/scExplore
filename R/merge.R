@@ -7,7 +7,7 @@
 #' @param type Data type: \code{counts} or \code{data} slots
 #' @param reduction Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)
 #' @param qclip Quantile value to clip gene expression values. This parameter reduces the effect of
-#' outlier cells with high gene expression according to a quantile of the distribution (default 0.95). All
+#' outlier cells with high gene expression according to a quantile of the distribution (default 0.99). All
 #' cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 #' the corresponding value of that quantile
 #' @param alpha Alpha level to adjust transparency of colors
@@ -54,14 +54,19 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
 
 
   # Clip outliers
-  clipValues <- function(x, qclip){
+  clipValues <- function(x, gene, qclip){
     clip <- quantile(x, qclip)
-    i <- x > clip
-    x[i] <- clip
+    if(clip){
+      i <- x > clip
+      x[i] <- clip
+    }else{
+      message(paste(qclip, "quantile for gene", gene , "is equal to 0. Clipping step will be ommited"))
+    }
     x
   }
 
-  expData <- apply(expData, 1, clipValues, qclip)
+  expData <- as.data.frame(Matrix::t(expData))
+  expData <- mapply(clipValues, x = expData, gene = colnames(expData), MoreArgs = list(qclip))
 
 
   # Scale data to [0,1] range
@@ -74,7 +79,8 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
   cellEmbeddings <- cbind(cellEmbeddings, overlay)
   cellEmbeddings$overlay <- as.character(cellEmbeddings$overlay)
 
-  cellEmbeddings <- cbind(cellEmbeddings, t(as.matrix(expDataGenes)))
+  #cellEmbeddings <- cbind(cellEmbeddings, t(as.matrix(expDataGenes)))
+  cellEmbeddings <- cbind(cellEmbeddings, expData)
 
 
   # Plot data
@@ -87,6 +93,8 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
   ggplot(cellEmbeddings) +
     aes_string(dimNames[1], dimNames[2]) +
     geom_point(color = cellEmbeddings$overlay, alpha = alpha, size = 0.9) +
+    xlab(gsub("_", " ", dimNames[1])) +
+    ylab(gsub("_", " ", dimNames[2])) +
     ggtitle("Merge") +
     theme_classic() -> p
 
@@ -99,7 +107,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
 
   pGenes$merge <- p
 
-  plot_grid(plotlist = pGenes, nrow = 1)
+  plot_grid(plotlist = pGenes, nrow = 1, rel_widths = c(1, 1, 3/4))
 
 
 }
@@ -118,6 +126,9 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
     geom_point(alpha = alpha, size = 0.9) +
     scale_color_gradient(low = "black", high = col) +
     ggtitle(gene) +
-    theme_classic()
+    xlab(gsub("_", " ", dimNames[1])) +
+    ylab(gsub("_", " ", dimNames[2])) +
+    theme_classic() +
+    labs(color = "Expr")
 
 }

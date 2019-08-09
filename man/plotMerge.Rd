@@ -19,7 +19,7 @@ plotMerge(object, gene1, gene2, type = "data", reduction = "umap",
 \item{reduction}{Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)}
 
 \item{qclip}{Quantile value to clip gene expression values. This parameter reduces the effect of
-outlier cells with high gene expression according to a quantile of the distribution (default 0.95). All
+outlier cells with high gene expression according to a quantile of the distribution (default 0.99). All
 cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 the corresponding value of that quantile}
 
