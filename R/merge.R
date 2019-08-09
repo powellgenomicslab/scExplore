@@ -50,7 +50,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
   cellEmbeddings <- as.data.frame(Embeddings(slot(object, "reductions")[[reduction]]))
 
   # Extract gene expression values
-  expData <- expData[rownames(expData) %in% c(gene1, gene2),] -> expDataGenes
+  expData <- expData[rownames(expData) %in% c(gene1, gene2),]
 
 
   # Clip outliers
@@ -66,7 +66,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
   }
 
   expData <- as.data.frame(Matrix::t(expData))
-  expData <- mapply(clipValues, x = expData, gene = colnames(expData), MoreArgs = list(qclip))
+  expData <- mapply(clipValues, x = expData, gene = colnames(expData), MoreArgs = list(qclip)) -> expDataGenes
 
 
   # Scale data to [0,1] range
@@ -80,7 +80,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
   cellEmbeddings$overlay <- as.character(cellEmbeddings$overlay)
 
   #cellEmbeddings <- cbind(cellEmbeddings, t(as.matrix(expDataGenes)))
-  cellEmbeddings <- cbind(cellEmbeddings, expData)
+  cellEmbeddings <- cbind(cellEmbeddings, expDataGenes)
 
 
   # Plot data
@@ -107,7 +107,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
 
   pGenes$merge <- p
 
-  plot_grid(plotlist = pGenes, nrow = 1, rel_widths = c(1, 1, 3/4))
+  plot_grid(plotlist = pGenes, nrow = 1, rel_widths = c(1, 1, 4/5))
 
 
 }
