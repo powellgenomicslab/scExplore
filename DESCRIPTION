@@ -1,0 +1,15 @@
+Package: scExplore
+Type: Package
+Title: Single-cell Data Visualization
+Version: 0.1.0
+Author: c(person("Jose", "Alquicira-Hernandez", email = "j.alquicira@garvan.org.au", rol = "aut, cre")
+Maintainer: Jose Alquicira-Hernandez <j.alquicira@garvan.org.au>
+Description: R package to visualiza single-cell data
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends:
+    ggplot2,
+    cowplot
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1
