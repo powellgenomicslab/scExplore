@@ -4,8 +4,8 @@
 \alias{plotMerge}
 \title{Plot expression of genes and their overlap}
 \usage{
-plotMerge(object, gene1, gene2, type = "data", reduction = "umap",
-  qclip = 0.99, alpha = 0.7, returnGrid = TRUE)
+plotMerge(object, gene1, gene2, reduction = "umap", type = "data",
+  qclip = 0.99, alpha = 0.7, size = 1, returnGrid = TRUE)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -14,9 +14,9 @@ plotMerge(object, gene1, gene2, type = "data", reduction = "umap",
 
 \item{gene2}{Gene 2}
 
-\item{type}{Data type: \code{counts} or \code{data} slots}
-
 \item{reduction}{Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)}
+
+\item{type}{Data type: \code{counts} or \code{data} slots}
 
 \item{qclip}{Quantile value to clip gene expression values. This parameter reduces the effect of
 outlier cells with high gene expression according to a quantile of the distribution (default 0.99). All
@@ -25,10 +25,10 @@ the corresponding value of that quantile}
 
 \item{alpha}{Alpha level to adjust transparency of colors}
 
+\item{size}{Size of points}
+
 \item{returnGrid}{If \code{TRUE}, a grid is generated using cowplot. Otherwise, a list with the plots is
 returned}
-
-\item{size}{Size of points}
 }
 \value{
 A grid plot with individual genes and merge gene expression values

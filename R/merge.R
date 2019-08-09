@@ -4,8 +4,8 @@
 #' @param object A Seurat object
 #' @param gene1 Gene 1
 #' @param gene2 Gene 2
-#' @param type Data type: \code{counts} or \code{data} slots
 #' @param reduction Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)
+#' @param type Data type: \code{counts} or \code{data} slots
 #' @param qclip Quantile value to clip gene expression values. This parameter reduces the effect of
 #' outlier cells with high gene expression according to a quantile of the distribution (default 0.99). All
 #' cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
@@ -26,7 +26,7 @@
 #'
 
 
-plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", qclip = 0.99, alpha = 0.7, returnGrid = TRUE){
+plotMerge <- function(object, gene1, gene2, reduction = "umap", type = "data", qclip = 0.99, alpha = 0.7, size = 1, returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -94,7 +94,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
 
   ggplot(cellEmbeddings) +
     aes_string(dimNames[1], dimNames[2]) +
-    geom_point(color = cellEmbeddings$overlay, alpha = alpha, size = 0.9) +
+    geom_point(color = cellEmbeddings$overlay, alpha = alpha, size = size) +
     xlab(gsub("_", " ", dimNames[1])) +
     ylab(gsub("_", " ", dimNames[2])) +
     ggtitle("Merge") +
@@ -105,6 +105,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
                    c(gene1, gene2), c("red", "blue"),
                    embed = list(cellEmbeddings),
                    alpha = list(alpha),
+                   size = list(size),
                    SIMPLIFY = FALSE)
 
   pGenes$merge <- p
@@ -119,7 +120,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
 }
 
 
-.plotGeneExp <- function(gene, col, embed, alpha){
+.plotGeneExp <- function(gene, col, embed, alpha, size){
 
   # Sort embeddings by gene expression values
   i <- order(embed[,gene])
@@ -129,7 +130,7 @@ plotMerge <- function(object, gene1, gene2, type = "data", reduction = "umap", q
 
   ggplot(embed) +
     aes_string(dimNames[1], dimNames[2], color = gene) +
-    geom_point(alpha = alpha, size = 0.9) +
+    geom_point(alpha = alpha, size = size) +
     scale_color_gradient(low = "black", high = col) +
     ggtitle(gene) +
     xlab(gsub("_", " ", dimNames[1])) +
