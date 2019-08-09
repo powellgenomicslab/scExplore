@@ -4,6 +4,7 @@
 #' @param object A Seurat object
 #' @param gene1 Gene 1
 #' @param gene2 Gene 2
+#' @param dims Dimensions to plot. Only two are valid.
 #' @param reduction Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)
 #' @param type Data type: \code{counts} or \code{data} slots
 #' @param qclip Quantile value to clip gene expression values. This parameter reduces the effect of
@@ -26,7 +27,7 @@
 #'
 
 
-plotMerge <- function(object, gene1, gene2, reduction = "umap", type = "data", qclip = 0.99, alpha = 0.7, size = 1, returnGrid = TRUE){
+plotMerge <- function(object, gene1, gene2, dims = c(1,2), reduction = "umap", type = "data", qclip = 0.99, alpha = 0.7, size = 1, returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -50,6 +51,7 @@ plotMerge <- function(object, gene1, gene2, reduction = "umap", type = "data", q
 
   # Extract embeddings
   cellEmbeddings <- as.data.frame(Embeddings(slot(object, "reductions")[[reduction]]))
+  cellEmbeddings <- cellEmbeddings[,dims]
 
   # Extract gene expression values
   expData <- expData[rownames(expData) %in% c(gene1, gene2),]

@@ -4,8 +4,9 @@
 \alias{plotMerge}
 \title{Plot expression of genes and their overlap}
 \usage{
-plotMerge(object, gene1, gene2, reduction = "umap", type = "data",
-  qclip = 0.99, alpha = 0.7, size = 1, returnGrid = TRUE)
+plotMerge(object, gene1, gene2, dims = c(1, 2), reduction = "umap",
+  type = "data", qclip = 0.99, alpha = 0.7, size = 1,
+  returnGrid = TRUE)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -13,6 +14,8 @@ plotMerge(object, gene1, gene2, reduction = "umap", type = "data",
 \item{gene1}{Gene 1}
 
 \item{gene2}{Gene 2}
+
+\item{dims}{Dimensions to plot. Only two are valid.}
 
 \item{reduction}{Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)}
 
