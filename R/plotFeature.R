@@ -120,7 +120,7 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
     if(is(var, "factor")){
       # Combine embeddings with variable
 
-      nLevs <- length(levels(feature))
+      nLevs <- length(levels(var))
 
       if(nLevs <= 16){
         pal <- pal16
