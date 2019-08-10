@@ -111,56 +111,64 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
 
   }else{
 
-  if(is(var, "character")) var <- as.factor(var)
+    if(is(var, "character")) var <- as.factor(var)
 
-  cellEmbeddings <- cbind(cellEmbeddings, var)
-  names(cellEmbeddings)[3] <- feature
-  dimNames <- names(cellEmbeddings)[1:2]
+    cellEmbeddings <- cbind(cellEmbeddings, var)
+    names(cellEmbeddings)[3] <- feature
+    dimNames <- names(cellEmbeddings)[1:2]
 
-  if(is(var, "factor")){
-    # Combine embeddings with variable
+    if(is(var, "factor")){
+      # Combine embeddings with variable
 
-    nLevs <- length(levels(feature))
+      nLevs <- length(levels(feature))
 
-    if(nLevs <= 16){
-      pal <- pal16
-    }else if(nLevs <= 21){
-      pal <- pal21
-    }else{
-      pal <- rainbow(n = nLevs)
+      if(nLevs <= 16){
+        pal <- pal16
+      }else if(nLevs <= 21){
+        pal <- pal21
+      }else if(nLevs <= 30){
+        pal <- rainbow(n = nLevs)
+      }else{
+        getColorHue <- function(n) {
+          hues = seq(15, 375, length = n + 1)
+          hcl(h = hues, l = 65, c = 100)[1:n]
+        }
+
+        pal <- getColorHue(60)
+      }
+
+      if(label){
+        cellEmbeddingsByClass <- split(cellEmbeddings, cellEmbeddings[, feature])
+
+        centroids <- as.data.frame(Reduce(rbind,
+                                          lapply(cellEmbeddingsByClass,
+                                                 function(x){
+                                                   x <- apply(x[,c(1,2)], 2, clara, k = 1)
+                                                   as.data.frame(lapply(x, "[[", "medoids"))
+                                                 }
+                                          )))
+        centroids[,feature] <- as.factor(names(cellEmbeddingsByClass))
+      }
+
+      p <-
+        ggplot(cellEmbeddings) +
+        aes_string(dimNames[1], dimNames[2], color = feature) +
+        geom_point(alpha = alpha, size = size) +
+        scale_color_manual(values = pal) +
+        ggtitle(feature) +
+        xlab(gsub("_", " ", dimNames[1])) +
+        ylab(gsub("_", " ", dimNames[2])) +
+        theme_classic() +
+        labs(color = "")
+
+      if(label){
+        p <- p + geom_label_repel(aes_string(label = feature),
+                                  color = "black",
+                                  label.size = NA,
+                                  fill = NA,
+                                  data = centroids) + theme(legend.position = "none")
+      }
     }
-
-    cellEmbeddingsByClass <- split(cellEmbeddings, cellEmbeddings[, feature])
-
-    centroids <- as.data.frame(Reduce(rbind,
-                                      lapply(cellEmbeddingsByClass,
-                                             function(x){
-                                               x <- apply(x[,c(1,2)], 2, clara, k = 1)
-                                               as.data.frame(lapply(x, "[[", "medoids"))
-                                             }
-                                      )))
-    centroids[,feature] <- as.factor(names(cellEmbeddingsByClass))
-
-
-    p <-
-      ggplot(cellEmbeddings) +
-      aes_string(dimNames[1], dimNames[2], color = feature) +
-      geom_point(alpha = alpha, size = size) +
-      scale_color_manual(values = pal) +
-      ggtitle(feature) +
-      xlab(gsub("_", " ", dimNames[1])) +
-      ylab(gsub("_", " ", dimNames[2])) +
-      theme_classic() +
-      labs(color = "")
-
-    if(label){
-      p <- p + geom_label_repel(aes_string(label = feature),
-                                color = "black",
-                                label.size = NA,
-                                fill = NA,
-                                data = centroids) + theme(legend.position = "none")
-    }
-  }
 
   }
   p
