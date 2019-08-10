@@ -5,6 +5,7 @@
 #' @param feature Feature to be plotted (gene expression or metadata)
 #' @param dims Dimensions to plot. Only two are valid.
 #' @param reduction Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)
+#' @param group Group variable in metadata
 #' @param type If gene expression is used, specify, rata type: \code{counts} or \code{data} slots
 #' @param qclip Quantile value to clip gene expression values or continuous variables. This parameter reduces the effect of
 #' outlier cells with high gene expression according to a quantile of the distribution (default 0.99). All

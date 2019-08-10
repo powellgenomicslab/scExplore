@@ -5,8 +5,8 @@
 \title{Plot feature on low-dimensional space}
 \usage{
 plotFeature(object, feature, dims = c(1, 2), reduction = "umap",
-  type = "data", qclip = 0.99, label = TRUE, alpha = 0.7,
-  size = 1)
+  group = NULL, type = "data", qclip = 0.99, label = TRUE,
+  alpha = 0.7, size = 1)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -16,6 +16,8 @@ plotFeature(object, feature, dims = c(1, 2), reduction = "umap",
 \item{dims}{Dimensions to plot. Only two are valid.}
 
 \item{reduction}{Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)}
+
+\item{group}{Group variable in metadata}
 
 \item{type}{If gene expression is used, specify, rata type: \code{counts} or \code{data} slots}
 
