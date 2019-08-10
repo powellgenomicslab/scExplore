@@ -6,7 +6,7 @@
 \usage{
 plotMerge(object, gene1, gene2, dims = c(1, 2), reduction = "umap",
   group = NULL, type = "data", qclip = 0.99, alpha = 0.7,
-  size = 1, bgColor = "#171716", returnGrid = TRUE)
+  size = 0.7, bgColor = "#171716", returnGrid = TRUE)
 }
 \arguments{
 \item{object}{A Seurat object}

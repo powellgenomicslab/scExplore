@@ -19,6 +19,7 @@
 #' returned
 #' @return A grid plot with individual genes and merge gene expression values
 #' @importFrom cowplot plot_grid
+#' @importFrom cowplot get_legend
 #' @export
 #' @author José Alquicira Hernández
 #' @examples
