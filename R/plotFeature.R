@@ -16,7 +16,7 @@
 #' @return A plot with feature of interest
 #' @importFrom cowplot plot_grid
 #' @importFrom ggrepel geom_label_repel
-#' @importFrom cluster pam
+#' @importFrom cluster clara
 #' @export
 #' @author José Alquicira Hernández
 #' @examples
@@ -135,7 +135,7 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
     centroids <- as.data.frame(Reduce(rbind,
                                       lapply(cellEmbeddingsByClass,
                                              function(x){
-                                               x <- apply(x[,c(1,2)], 2, pam, k = 1)
+                                               x <- apply(x[,c(1,2)], 2, clara, k = 1)
                                                as.data.frame(lapply(x, "[[", "medoids"))
                                              }
                                       )))
