@@ -126,15 +126,8 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
         pal <- pal16
       }else if(nLevs <= 21){
         pal <- pal21
-      }else if(nLevs <= 30){
+      }else if(nLevs > 21){
         pal <- rainbow(n = nLevs)
-      }else{
-        getColorHue <- function(n) {
-          hues = seq(15, 375, length = n + 1)
-          hcl(h = hues, l = 65, c = 100)[1:n]
-        }
-
-        pal <- getColorHue(60)
       }
 
       if(label){
