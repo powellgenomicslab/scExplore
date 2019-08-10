@@ -25,7 +25,7 @@ Plot divided by cluster information
 plotMerge(pbmc, gene1 = "CD3D", gene2 = "CD8A", group = "seurat_clusters", size = 0.2)
 ```
 
-![Example](misc/example_group.png)
+![Example](misc/example_clusters.png)
 
 
 Plot expression of `CD3D` in pca
