@@ -30,7 +30,9 @@
 #'
 
 
-plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 1, alpha = 0.7, size = 0.3, bgColor = "#171716", returnGrid = TRUE){
+plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "umap",
+                    group = NULL, subset = NULL, type = "data", qclip = 1, alpha = 0.7, size = 0.3,
+                    bgColor = "#171716", returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -76,6 +78,17 @@ plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "uma
 
   # Extract embeddings
   cellEmbeddings <- as.data.frame(Embeddings(slot(object, "reductions")[[reduction]]))
+
+  if(!is.null(subset)){
+    i <- rownames(cellEmbeddings) %in% subset
+    if(!length(i)){
+      stop("No cells were obtained after subsetting. Check provided cell ids")
+    }
+    cellEmbeddings <- cellEmbeddings[i,]
+    expData <- expData[,i]
+    if(isGroup) groupVar <- groupVar[i]
+  }
+
 
   # Validate dimensions
   dimsInEmbeddings <- dims %in% seq_len(ncol(cellEmbeddings))
