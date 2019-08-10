@@ -1,9 +1,9 @@
-#' @title Plot expression of genes and their overlap
+#' @title Plot expression of genes
 #' @description This function allows to plot the expression of genes in individual color scales
 #' and their corresponding "merge" visualization
 #' @param object A Seurat object
 #' @param gene1 Gene 1
-#' @param gene2 Gene 2
+#' @param gene2 Gene 2 (optional)
 #' @param dims Dimensions to plot. Only two are valid.
 #' @param reduction Dimensionality reduction (e.g. \code{pca}, \code{umap}, \code{tsne}, ...)
 #' @param group Group variable in metadata
@@ -30,7 +30,7 @@
 #'
 
 
-plotMerge <- function(object, gene1, gene2, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 0.99, alpha = 0.7, size = 0.7, bgColor = "#171716", returnGrid = TRUE){
+plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 0.99, alpha = 0.7, size = 0.3, bgColor = "#171716", returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -48,8 +48,11 @@ plotMerge <- function(object, gene1, gene2, dims = c(1,2), reduction = "umap", g
   if(!gene1 %in% rownames(expData)){
     stop(paste0("gene '", gene1, "' is not present in data"))
   }
-  if(!gene2 %in% rownames(expData)){
-    stop(paste0("gene '", gene2, "' is not present in data"))
+
+  if(!is.null(gene2)){
+    if(!gene2 %in% rownames(expData)){
+      stop(paste0("gene '", gene2, "' is not present in data"))
+    }
   }
 
 
@@ -85,8 +88,12 @@ plotMerge <- function(object, gene1, gene2, dims = c(1,2), reduction = "umap", g
   cellEmbeddings <- cellEmbeddings[,dims]
 
   # Extract gene expression values
-  expData <- expData[rownames(expData) %in% c(gene1, gene2),]
 
+  if(is.null(gene2)){
+    expData <- expData[rownames(expData) %in% gene1, , drop = FALSE]
+  }else{
+    expData <- expData[rownames(expData) %in% c(gene1, gene2),]
+  }
 
   # Clip outliers
   clipValues <- function(x, gene, qclip){
@@ -107,8 +114,15 @@ plotMerge <- function(object, gene1, gene2, dims = c(1,2), reduction = "umap", g
   # Scale data to [0,1] range
   expData <- apply(expData, 2, function(x) x / max(x))
 
-  overlay <- rgb(green = 0, red=expData[,gene1], blue = expData[,gene2])
+  red <- expData[,gene1]
 
+  if(is.null(gene2)){
+    blue <- 0
+  }else{
+    blue <-  expData[,gene2]
+  }
+
+  overlay <- rgb(green = 0, red = red, blue = blue)
 
   # Combine gene/color gradients with dimensionality reductiond data
   cellEmbeddings <- cbind(cellEmbeddings, overlay)
@@ -146,13 +160,25 @@ plotMerge <- function(object, gene1, gene2, dims = c(1,2), reduction = "umap", g
   }
 
 
+  genes <- c(gene1, gene2)
+  colors <- c("red", "blue")
+  colors <- colors[seq_along(genes)]
+
   pGenes <- mapply(FUN = .plotGeneExp,
-                   c(gene1, gene2), c("red", "blue"),
+                   genes, colors,
                    embed = list(cellEmbeddings),
                    alpha = list(alpha),
                    size = list(size),
                    bgColor = list(bgColor),
                    SIMPLIFY = FALSE)
+
+  if(is.null(gene2)){
+    p <- pGenes[[1]]
+    if(isGroup){
+      p <- p + facet_wrap(as.formula(paste("~", group)))
+    }
+    return(p)
+  }
 
 
   if(isGroup){

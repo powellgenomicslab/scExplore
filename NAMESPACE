@@ -2,8 +2,8 @@
 
 export(pal16)
 export(pal21)
+export(plotExp)
 export(plotFeature)
-export(plotMerge)
 importFrom(cluster,clara)
 importFrom(cowplot,get_legend)
 importFrom(cowplot,plot_grid)
