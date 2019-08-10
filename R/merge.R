@@ -9,7 +9,7 @@
 #' @param group Group variable in metadata
 #' @param type Data type: \code{counts} or \code{data} slots
 #' @param qclip Quantile value to clip gene expression values. This parameter reduces the effect of
-#' outlier cells with high gene expression according to a quantile of the distribution (default 0.99). All
+#' outlier cells with high gene expression according to a quantile of the distribution (default 1: No clipping). All
 #' cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 #' the corresponding value of that quantile
 #' @param alpha Alpha level to adjust transparency of colors
@@ -30,7 +30,7 @@
 #'
 
 
-plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 0.99, alpha = 0.7, size = 0.3, bgColor = "#171716", returnGrid = TRUE){
+plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 1, alpha = 0.7, size = 0.3, bgColor = "#171716", returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")

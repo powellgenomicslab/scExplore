@@ -8,7 +8,7 @@
 #' @param group Group variable in metadata
 #' @param type If gene expression is used, specify, rata type: \code{counts} or \code{data} slots
 #' @param qclip Quantile value to clip gene expression values or continuous variables. This parameter reduces the effect of
-#' outlier cells with high gene expression according to a quantile of the distribution (default 0.99). All
+#' outlier cells with high gene expression according to a quantile of the distribution (default 1: No clipping). All
 #' cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 #' the corresponding value of that quantile
 #' @param label Label clusters when a categorical variable is used. Removes legend.
@@ -28,7 +28,7 @@
 #'
 
 
-plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 0.99, label = TRUE, alpha = 0.7, size = 1){
+plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 1, label = TRUE, alpha = 0.7, size = 1){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")

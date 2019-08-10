@@ -5,7 +5,7 @@
 \title{Plot feature on low-dimensional space}
 \usage{
 plotFeature(object, feature, dims = c(1, 2), reduction = "umap",
-  group = NULL, type = "data", qclip = 0.99, label = TRUE,
+  group = NULL, type = "data", qclip = 1, label = TRUE,
   alpha = 0.7, size = 1)
 }
 \arguments{
@@ -22,7 +22,7 @@ plotFeature(object, feature, dims = c(1, 2), reduction = "umap",
 \item{type}{If gene expression is used, specify, rata type: \code{counts} or \code{data} slots}
 
 \item{qclip}{Quantile value to clip gene expression values or continuous variables. This parameter reduces the effect of
-outlier cells with high gene expression according to a quantile of the distribution (default 0.99). All
+outlier cells with high gene expression according to a quantile of the distribution (default 1: No clipping). All
 cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 the corresponding value of that quantile}
 
