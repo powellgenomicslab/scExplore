@@ -27,7 +27,7 @@
 #'
 
 
-plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type = "data", qclip = 0.99, label = TRUE, alpha = 0.7, size = 1){
+plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 0.99, label = TRUE, alpha = 0.7, size = 1){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -54,6 +54,22 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
     var <- expData[inExpData,]
   }
 
+  # Get groupping variable if provided
+
+  if(!is.null(group)){
+
+    if(group %in% colnames(metadata)){
+      groupVar <- metadata[,group]
+      isGroup <- TRUE
+    }else{
+      stop("Group variable not present in meta.data")
+    }
+
+
+  }else{
+    isGroup <- FALSE
+  }
+
 
   # Extract embeddings
   cellEmbeddings <- as.data.frame(Embeddings(slot(object, "reductions")[[reduction]]))
@@ -66,6 +82,7 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
     missingDim <- dims[which(!dimsInEmbeddings)]
     stop(paste("Dimension", missingDim, "does not exist in", reduction, "\n  "))
   }
+
 
 
   if(is(var, "numeric") | is(var, "integer")){
@@ -91,6 +108,10 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
 
     # Plot data
     dimNames <- names(cellEmbeddings)[1:2]
+
+    if(isGroup){
+      cellEmbeddings[,group] <- groupVar
+    }
 
     # Sort embeddings by color
     i <- order(cellEmbeddings[, feature])
@@ -143,6 +164,10 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
         centroids[,feature] <- as.factor(names(cellEmbeddingsByClass))
       }
 
+      if(isGroup){
+        cellEmbeddings[,group] <- groupVar
+      }
+
       p <-
         ggplot(cellEmbeddings) +
         aes_string(dimNames[1], dimNames[2], color = feature) +
@@ -154,6 +179,7 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
         theme_classic() +
         labs(color = "")
 
+
       if(label){
         p <- p + geom_label_repel(aes_string(label = feature),
                                   color = "black",
@@ -164,6 +190,11 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", type
     }
 
   }
+
+  if(!is.null(group)){
+    p <- p + facet_wrap(as.formula(paste("~", group)))
+  }
+
   p
 
 
