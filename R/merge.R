@@ -12,6 +12,7 @@
 #' outlier cells with high gene expression according to a quantile of the distribution (default 1: No clipping). All
 #' cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 #' the corresponding value of that quantile
+#' @param dropout Binarizes gene expression data. Assigns 1 to gene expression values greater than 0
 #' @param alpha Alpha level to adjust transparency of colors
 #' @param size Size of points
 #' @param bgColor Background color
@@ -31,7 +32,7 @@
 
 
 plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "umap",
-                    group = NULL, subset = NULL, type = "data", qclip = 1, alpha = 0.7, size = 0.3,
+                    group = NULL, subset = NULL, type = "data", qclip = 1, dropout = FALSE, alpha = 0.7, size = 0.3,
                     bgColor = "#171716", returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
@@ -122,6 +123,12 @@ plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "uma
 
   expData <- as.data.frame(Matrix::t(expData))
   expData <- mapply(clipValues, x = expData, gene = colnames(expData), MoreArgs = list(qclip)) -> expDataGenes
+
+  if(dropout){
+    expDataGenes <- expData <- apply(expData, 2, function(x){
+      ifelse(x > 0, 1, 0)
+    })
+  }
 
 
   # Scale data to [0,1] range
