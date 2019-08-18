@@ -28,7 +28,9 @@
 #'
 
 
-plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", group = NULL, type = "data", qclip = 1, label = TRUE, alpha = 0.7, size = 1){
+plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap",
+                        group = NULL, subset = NULL, type = "data",
+                        qclip = 1, label = TRUE, alpha = 0.7, size = 1){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -75,6 +77,17 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", grou
   # Extract embeddings
   cellEmbeddings <- as.data.frame(Embeddings(slot(object, "reductions")[[reduction]]))
   cellEmbeddings <- cellEmbeddings[,dims]
+
+  # Subset cells if required
+  if(!is.null(subset)){
+    i <- rownames(cellEmbeddings) %in% subset
+    if(!length(i)){
+      stop("No cells were obtained after subsetting. Check provided cell ids")
+    }
+    cellEmbeddings <- cellEmbeddings[i,]
+    var <- var[i]
+    if(isGroup) groupVar <- groupVar[i]
+  }
 
   # Validate dimensions
   dimsInEmbeddings <- dims %in% seq_len(ncol(cellEmbeddings))
@@ -133,7 +146,11 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap", grou
 
   }else{
 
-    if(is(var, "character")) var <- as.factor(var)
+    if(is(var, "character")){
+      var <- as.factor(var)
+    }else{
+      var <- factor(var, levels = sort(unique(var)))
+    }
 
     cellEmbeddings <- cbind(cellEmbeddings, var)
     names(cellEmbeddings)[3] <- feature
