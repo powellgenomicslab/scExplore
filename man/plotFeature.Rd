@@ -5,8 +5,8 @@
 \title{Plot feature on low-dimensional space}
 \usage{
 plotFeature(object, feature, dims = c(1, 2), reduction = "umap",
-  group = NULL, type = "data", qclip = 1, label = TRUE,
-  alpha = 0.7, size = 1)
+  group = NULL, subset = NULL, type = "data", qclip = 1,
+  label = TRUE, alpha = 0.7, size = 1)
 }
 \arguments{
 \item{object}{A Seurat object}

@@ -5,8 +5,9 @@
 \title{Plot expression of genes}
 \usage{
 plotExp(object, gene1, gene2 = NULL, dims = c(1, 2),
-  reduction = "umap", group = NULL, type = "data", qclip = 1,
-  alpha = 0.7, size = 0.3, bgColor = "#171716", returnGrid = TRUE)
+  reduction = "umap", group = NULL, subset = NULL, type = "data",
+  qclip = 1, dropout = FALSE, alpha = 0.7, size = 0.3,
+  bgColor = "#171716", returnGrid = TRUE)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -27,6 +28,8 @@ plotExp(object, gene1, gene2 = NULL, dims = c(1, 2),
 outlier cells with high gene expression according to a quantile of the distribution (default 1: No clipping). All
 cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 the corresponding value of that quantile}
+
+\item{dropout}{Binarizes gene expression data. Assigns 1 to gene expression values greater than 0}
 
 \item{alpha}{Alpha level to adjust transparency of colors}
 
