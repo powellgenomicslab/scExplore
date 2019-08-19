@@ -33,7 +33,7 @@
 
 plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "umap",
                     group = NULL, subset = NULL, type = "data", qclip = 1, dropout = FALSE, alpha = 0.7, size = 0.3,
-                    bgColor = "#171716", returnGrid = TRUE){
+                    bgColor = "gray20", returnGrid = TRUE){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -168,7 +168,7 @@ plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "uma
 
   ggplot(cellEmbeddings) +
     aes_string(dimNames[1], dimNames[2]) +
-    geom_point(color = cellEmbeddings$overlay, alpha = alpha, size = size) +
+    geom_point(color = cellEmbeddings$overlay, alpha = alpha, size = size, shape = 16) +
     xlab(gsub("_", " ", dimNames[1])) +
     ylab(gsub("_", " ", dimNames[2])) +
     ggtitle("Merge") +
@@ -231,7 +231,7 @@ plotExp <- function(object, gene1, gene2 = NULL, dims = c(1,2), reduction = "uma
 
   ggplot(embed) +
     aes_string(dimNames[1], dimNames[2], color = gene) +
-    geom_point(alpha = alpha, size = size) +
+    geom_point(alpha = alpha, size = size, shape = 16) +
     scale_color_gradient(low = "black", high = col) +
     ggtitle(gene) +
     xlab(gsub("_", " ", dimNames[1])) +
