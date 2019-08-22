@@ -7,7 +7,7 @@
 plotExp(object, gene1, gene2 = NULL, dims = c(1, 2),
   reduction = "umap", group = NULL, subset = NULL, type = "data",
   qclip = 1, dropout = FALSE, alpha = 0.7, size = 0.3,
-  bgColor = "#171716", returnGrid = TRUE)
+  bgColor = "gray20", returnGrid = TRUE)
 }
 \arguments{
 \item{object}{A Seurat object}

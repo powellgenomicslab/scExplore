@@ -14,6 +14,7 @@
 #' @param label Label clusters when a categorical variable is used. Removes legend.
 #' @param alpha Alpha level to adjust transparency of colors
 #' @param size Size of points
+#' @param pal Color palette to use
 #' @return A plot with feature of interest
 #' @importFrom cowplot plot_grid
 #' @importFrom ggrepel geom_label_repel
@@ -30,7 +31,7 @@
 
 plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap",
                         group = NULL, subset = NULL, type = "data",
-                        qclip = 1, label = TRUE, alpha = 0.7, size = 1){
+                        qclip = 1, label = TRUE, alpha = 0.7, size = 1, pal = NULL){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -161,12 +162,18 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap",
 
       nLevs <- length(levels(var))
 
-      if(nLevs <= 16){
-        pal <- pal16
-      }else if(nLevs <= 21){
-        pal <- pal21
-      }else if(nLevs > 21){
-        pal <- rainbow(n = nLevs)
+      if(!is.null(pal) & nLevs > length(pal)){
+        stop("Insufficient colors in provided color palette. Using default colors")
+      }else{
+
+        if(nLevs <= 16){
+          pal <- pal16
+        }else if(nLevs <= 21){
+          pal <- pal21
+        }else if(nLevs > 21){
+          pal <- rainbow(n = nLevs)
+        }
+
       }
 
       if(label){

@@ -6,7 +6,7 @@
 \usage{
 plotFeature(object, feature, dims = c(1, 2), reduction = "umap",
   group = NULL, subset = NULL, type = "data", qclip = 1,
-  label = TRUE, alpha = 0.7, size = 1)
+  label = TRUE, alpha = 0.7, size = 1, pal = NULL)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -31,6 +31,8 @@ the corresponding value of that quantile}
 \item{alpha}{Alpha level to adjust transparency of colors}
 
 \item{size}{Size of points}
+
+\item{pal}{Color palette to use}
 }
 \value{
 A plot with feature of interest
