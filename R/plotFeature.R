@@ -11,7 +11,8 @@
 #' outlier cells with high gene expression according to a quantile of the distribution (default 1: No clipping). All
 #' cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 #' the corresponding value of that quantile
-#' @param label Label clusters when a categorical variable is used. Removes legend.
+#' @param label Label clusters when a categorical variable is used
+#' @param label Include legend?
 #' @param alpha Alpha level to adjust transparency of colors
 #' @param size Size of points
 #' @param pal Color palette to use
@@ -23,7 +24,7 @@
 #' @author José Alquicira Hernández
 #' @examples
 #'
-#' # Plot gene expression of CD8A and CD3D from log-normalized data over a UMAP plot
+#' # Plot clusters
 #'
 #' plotFeature(pbmc, "seurat_clusters")
 #'
@@ -31,7 +32,7 @@
 
 plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap",
                         group = NULL, subset = NULL, type = "data",
-                        qclip = 1, label = TRUE, alpha = 0.7, size = 1, pal = NULL){
+                        qclip = 1, label = TRUE, legend = TRUE, alpha = 0.7, size = 0.3, legPtSize = 4, pal = NULL){
 
   if(!is(object, "Seurat")){
     stop("Input object must be of 'Seurat' class")
@@ -136,7 +137,7 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap",
     p <-
       ggplot(cellEmbeddings) +
       aes_string(dimNames[1], dimNames[2], color = feature) +
-      geom_point(alpha = alpha, size = size) +
+      geom_point(alpha = alpha, size = size, shape = 16) +
       xlab(gsub("_", " ", dimNames[1])) +
       ylab(gsub("_", " ", dimNames[2])) +
       ggtitle(feature) +
@@ -196,13 +197,14 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap",
       p <-
         ggplot(cellEmbeddings) +
         aes_string(dimNames[1], dimNames[2], color = feature) +
-        geom_point(alpha = alpha, size = size) +
+        geom_point(alpha = alpha, size = size, shape = 16) +
         scale_color_manual(values = pal) +
         ggtitle(feature) +
         xlab(gsub("_", " ", dimNames[1])) +
         ylab(gsub("_", " ", dimNames[2])) +
         theme_classic() +
-        labs(color = "")
+        labs(color = "") +
+        guides(color = guide_legend(override.aes = list(size = legPtSize)))
 
 
       if(label){
@@ -210,10 +212,14 @@ plotFeature <- function(object, feature, dims = c(1,2), reduction = "umap",
                                   color = "black",
                                   label.size = NA,
                                   fill = NA,
-                                  data = centroids) + theme(legend.position = "none")
+                                  data = centroids)
       }
-    }
 
+      if(!legend){
+        p <- p + theme(legend.position = "none")
+      }
+
+    }
   }
 
   if(!is.null(group)){

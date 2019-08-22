@@ -6,7 +6,8 @@
 \usage{
 plotFeature(object, feature, dims = c(1, 2), reduction = "umap",
   group = NULL, subset = NULL, type = "data", qclip = 1,
-  label = TRUE, alpha = 0.7, size = 1, pal = NULL)
+  label = TRUE, legend = TRUE, alpha = 0.7, size = 0.3,
+  legPtSize = 4, pal = NULL)
 }
 \arguments{
 \item{object}{A Seurat object}
@@ -26,13 +27,15 @@ outlier cells with high gene expression according to a quantile of the distribut
 cells for each gene expressing a value greater to the quantile value in the distribution are rescaled to
 the corresponding value of that quantile}
 
-\item{label}{Label clusters when a categorical variable is used. Removes legend.}
+\item{label}{Label clusters when a categorical variable is used}
 
 \item{alpha}{Alpha level to adjust transparency of colors}
 
 \item{size}{Size of points}
 
 \item{pal}{Color palette to use}
+
+\item{label}{Include legend?}
 }
 \value{
 A plot with feature of interest
@@ -43,7 +46,7 @@ a low-dimensional space
 }
 \examples{
 
-# Plot gene expression of CD8A and CD3D from log-normalized data over a UMAP plot
+# Plot clusters
 
 plotFeature(pbmc, "seurat_clusters")
 
